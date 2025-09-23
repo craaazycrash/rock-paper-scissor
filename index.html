@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors Pro</title>
+</head>
+<body>
+    <div class="floating-particles">
+        <div class="particle" style="width: 10px; height: 10px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="width: 8px; height: 8px; top: 60%; left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="width: 12px; height: 12px; top: 40%; left: 80%; animation-delay: 4s;"></div>
+        <div class="particle" style="width: 6px; height: 6px; top: 80%; left: 70%; animation-delay: 1s;"></div>
+        <div class="particle" style="width: 14px; height: 14px; top: 10%; left: 90%; animation-delay: 3s;"></div>
+    </div>
+
+    <div class="game-container">
+        <h1>Rock Paper Scissors</h1>
+        <p class="subtitle">Choose your weapon and battle the AI!</p>
+        
+        <div class="score-board">
+            <div class="score">
+                <span class="score-number" id="playerScore">0</span>
+                <span class="score-label">You</span>
+            </div>
+            <div class="score">
+                <span class="score-number" id="computerScore">0</span>
+                <span class="score-label">AI</span>
+            </div>
+        </div>
+
+        <div class="choices">
+            <button class="choice-btn" onclick="play('Rock')" title="Rock crushes Scissors">🗿</button>
+            <button class="choice-btn" onclick="play('Paper')" title="Paper covers Rock">📄</button>
+            <button class="choice-btn" onclick="play('Scissors')" title="Scissors cuts Paper">✂️</button>
+        </div>
+
+        <div class="result-area">
+            <div class="game-result" id="result">Make your choice and let the battle begin!</div>
+        </div>
+
+        <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+    </div>
+
+    <script>
+        let playerScore = 0;
+        let computerScore = 0;
+
+        function play(playerChoice) {
+            const choices = ['Rock', 'Paper', 'Scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+            
+            const result = document.getElementById('result');
+            const playerScoreEl = document.getElementById('playerScore');
+            const computerScoreEl = document.getElementById('computerScore');
+
+            let outcome = '';
+            let outcomeClass = '';
+
+            if (playerChoice === computerChoice) {
+                outcome = "It's a Tie!";
+                outcomeClass = 'tie';
+            } else if (
+                (playerChoice === 'Rock' && computerChoice === 'Scissors') ||
+                (playerChoice === 'Paper' && computerChoice === 'Rock') ||
+                (playerChoice === 'Scissors' && computerChoice === 'Paper')
+            ) {
+                outcome = 'You Win!';
+                outcomeClass = 'win';
+                playerScore++;
+            } else {
+                outcome = 'AI Wins!';
+                outcomeClass = 'lose';
+                computerScore++;
+            }
+
+            const choiceEmojis = {
+                'Rock': '🗿',
+                'Paper': '📄',
+                'Scissors': '✂️'
+            };
+
+            result.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>You:</strong> ${choiceEmojis[playerChoice]} ${playerChoice} 
+                    <span style="margin: 0 15px;">VS</span> 
+                    <strong>AI:</strong> ${choiceEmojis[computerChoice]} ${computerChoice}
+                </div>
+                <div class="outcome ${outcomeClass}">${outcome}</div>
+            `;
+
+            playerScoreEl.textContent = playerScore;
+            computerScoreEl.textContent = computerScore;
+
+            // Add some animation to the score that changed
+            if (outcomeClass === 'win') {
+                animateScore(playerScoreEl);
+            } else if (outcomeClass === 'lose') {
+                animateScore(computerScoreEl);
+            }
+        }
+
+        function animateScore(element) {
+            element.style.transform = 'scale(1.3)';
+            element.style.color = '#ff6b6b';
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+                element.style.color = '#feca57';
+            }, 300);
+        }
+
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            document.getElementById('playerScore').textContent = '0';
+            document.getElementById('computerScore').textContent = '0';
+            document.getElementById('result').innerHTML = 'Game reset! Make your choice and let the battle begin!';
+        }
+    </script>
+</body>
+    </html>
+
